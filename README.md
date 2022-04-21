@@ -1,5 +1,6 @@
 # LiZhi-OnlineClassroom-Courseware-Tool  
 希沃立知课堂中教师课件自动获取工具，使用Python开发，包括自动下载课件、自动打包课件为enbx等  
+**来自编者：以下的步骤虽然看上去复杂，但是熟能生巧，多使用该程序后，操作时间可以压缩至30秒钟（不包含课件下载时间）**  
 
 ## 一、 通过该工具获取课程回放中的课件的方法  
 **1.打开立知课堂官网**  
@@ -30,3 +31,18 @@
 
 **8.课件下载完成后，就可以看见软件的目录下出现“Courseware.enbx”，这个文件就是可以用希沃白板直接打开的课件**  
 <img width="490" alt="捕获8" src="https://user-images.githubusercontent.com/79049368/164380886-99aa36d4-e4ea-4aac-b84c-772070ba45fa.PNG">
+
+## 二、 通过该工具获取直播课程中的课件的方法  
+**1.在教室中打开F12开发者工具，并找到“网络”（如图）**  
+<img width="960" alt="捕获21" src="https://user-images.githubusercontent.com/79049368/164383355-3be97dca-a506-4fb3-86d5-89cab2726a12.PNG">
+
+**2.保持F12开发者工具开启后刷新教室**  
+<img width="960" alt="捕获23" src="https://user-images.githubusercontent.com/79049368/164383518-4e3e85ed-2510-43c9-bc3c-543dbedc71ab.PNG">
+
+**3.找到链接地址包含“GET_COURSE_ACCESS_CODE_LIST”，并点击**  
+点击后，在右侧的详情栏找到“负载”（如图）  
+可以展开“查询字符串参数”（如果已展开，就不需要做这一项操作）  
+在展开的数据中找到“accessCode”，然后用鼠标选择冒号后的所有字符，直到这一行结束，然后复制这一段字符  
+<img width="621" alt="捕获24" src="https://user-images.githubusercontent.com/79049368/164384431-31bc90f1-9958-4480-9cfd-c7371b50b25e.PNG">
+
+**4.接下来需要做的和“通过该工具获取课程回放中的课件的方法”中的4~8步骤相同  
