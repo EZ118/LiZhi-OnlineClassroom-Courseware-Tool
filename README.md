@@ -15,7 +15,7 @@
 点击后，在右侧的详情栏找到“负载”（如图）  
 可以展开“查询字符串参数”（如果已展开，就不需要做这一项操作）  
 在展开的数据中找到“accessCode”，然后用鼠标选择冒号后的所有字符，直到这一行结束，然后复制这一段字符  
-<img width="617" alt="捕获4" src="https://user-images.githubusercontent.com/79049368/164376800-4f9654a0-0f7d-48ef-a663-9ee915e0b0a8.PNG">
+<img width="700" alt="捕获4" src="https://user-images.githubusercontent.com/79049368/164376800-4f9654a0-0f7d-48ef-a663-9ee915e0b0a8.PNG">
 
 **5.打开程序所在目录（文件夹），并启动程序**  
 <img width="485" alt="捕获5" src="https://user-images.githubusercontent.com/79049368/164378133-b4eed9b3-0e3c-444e-845c-e7ae13d039c4.PNG">
