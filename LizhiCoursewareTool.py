@@ -9,14 +9,47 @@ headers = {
     "Accept": "*/*",
     "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
-    "Cookie": "x-auth-app=en-easilive; ",
+    "Cookie": "x-auth-token=7516bf29191348b683bb7c3b4c601c1a; x-auth-app=en-easilive; ",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64;` rv:47.0) Gecko/20100101 Firefox/47.0"
 }
+#请求时传输的Cookies、UA等待数据
+
+def getCoursewareList(cUid):
+    url = "https://s2.imlizhi.com/slive/pc/apis.json?actionName=GET_COURSE_ACCESS_CODE_LIST&t=1650588247339"
+    #接入立知后台
+    
+    data = {"courseUid":cUid}
+    fl = requests.post(url=url, data=data, headers=headers)
+    filelist = json.loads(fl.content)
+    
+    if filelist["error_code"] != 0:
+        #当返回的结果输出错误代码
+        
+        print("[ERROR] " + filelist["message"])
+        return "error"
+    else:
+        #正确返回
+        
+        print("[MSG] Choose A Courseware To Download")
+        #提示选择返回的课件列表
+        
+        cnt = 0
+        for dl in filelist["data"]:
+            cnt += 1
+            print("< " + str(cnt) + " > NAME: " + dl["name"])
+        IptNum = int(input("[INPUT] Input No.: ")) - 1
+
+        if IptNum < 0 or IptNum >= cnt:
+            return {}
+        else:
+            return {"name":filelist["data"][IptNum]["name"],"cid":filelist["data"][IptNum]["cid"],"accessCode":filelist["data"][IptNum]["accessCode"],"version":filelist["data"][IptNum]["version"]}
+#用于获取课件列表
 
 def request_download(IMAGE_URL, fn):
     r = requests.get(IMAGE_URL)
     with open(fn, 'wb') as f:
         f.write(r.content)
+#用于下载课件内容
 
 def GoZip(absDir,zipFile):
     for f in os.listdir(absDir):
@@ -29,24 +62,25 @@ def GoZip(absDir,zipFile):
             relFile=absFile[len(os.getcwd())+1:]
             zipFile.write(relFile)
     return
+#用于打包课件
 
 def submit(ac):
     dirf = dirf = str(os.path.dirname(os.path.realpath(sys.argv[0])))
     try:
         shutil.rmtree(dirf + "\\Courseware\\")
-        print("[DEL] Done!")
+        print("[DELETE] Done!")
     except:
-        print("[DEL] Failed!")
+        print("[DELETE] Failed!")
     
     try:
         os.mkdir(dirf + "\\Courseware\\")
         os.makedirs(dirf + "\\Courseware\\Resources\\")
         os.makedirs(dirf + "\\Courseware\\Slides\\")
-        print("[MD] Done!")
+        print("[MAKEDIR] Done!")
     except:
-        print("[MD] Failed!")
+        print("[MAKEDIR] Failed!")
     
-    url = "https://easilive.seewo.com/enow/open/api/v1/courseware/2/detail??shareLinkUid=&accessCode=" + ac + "&cid=&turnMp4=true&expireSeconds=10800&w=1280&h=612&turnWebp=false"
+    url = "https://easilive.seewo.com/enow/open/api/v1/courseware/2/detail?shareLinkUid=&accessCode=" + ac + "&cid=&turnMp4=true&expireSeconds=10800&w=1280&h=612&turnWebp=false"
     fl = requests.get(url, headers=headers)
     filelist=json.loads(fl.content)
     if filelist["error_code"] != 0:
@@ -90,12 +124,19 @@ try:
         print("-p [path]                 <Start Packing>")
     
 except Exception as re:
-    print(re)
+    #print(re)
     print("")
+#这里是用于ZIP打包时获取后缀信息
 
 print("Welcome Using Lizhi Courseware Tool (Lite)")
-print("Now, Enter The AccessCode Of The Courseware, you can find it in Network item of F12 Tool when online classroom loading.")
-data = input("ACCESSCODE: ")
+print("输入courseUid来获取教室课件资源，你可以在教室的链接中找到它（如\".../room?courseUid=[这里就是courseUid]&appCode...\"）")
+cUid = input("[INPUT] courseUid: ")
 print("")
-print("======[ PROCESSING ]======")
-submit(data)
+CList = getCoursewareList(cUid)
+
+if CList == {}:
+    print("[ERROR] Please Input The Right No.")
+    sys.exit(0)
+else:
+    print("======[ PROCESSING ]======")
+    submit(str(CList["accessCode"]))
