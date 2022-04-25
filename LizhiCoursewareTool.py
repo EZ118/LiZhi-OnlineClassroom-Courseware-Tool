@@ -14,7 +14,14 @@ headers = {
 }
 #请求时传输的Cookies、UA等待数据
 
+def DelEvalString(s):
+    s = s.replace("\\", "_").replace("/", "_").replace(":", "_").replace("\"", "_").replace(" ", "_")
+    s = s.replace("*", "_").replace("?", "_").replace("<", "_").replace(">", "_").replace("|", "_")
+    return s
+
 def getCoursewareList(cUid):
+    #用于通过courseUid获取课件列表
+    
     url = "https://s2.imlizhi.com/slive/pc/apis.json?actionName=GET_COURSE_ACCESS_CODE_LIST&t=1650588247339"
     #接入立知后台
     
@@ -43,15 +50,16 @@ def getCoursewareList(cUid):
             return {}
         else:
             return {"name":filelist["data"][IptNum]["name"],"cid":filelist["data"][IptNum]["cid"],"accessCode":filelist["data"][IptNum]["accessCode"],"version":filelist["data"][IptNum]["version"]}
-#用于获取课件列表
+
 
 def request_download(IMAGE_URL, fn):
+    #用于课件文件下载工具
     r = requests.get(IMAGE_URL)
     with open(fn, 'wb') as f:
         f.write(r.content)
-#用于下载课件内容
 
 def GoZip(absDir,zipFile):
+    #打包课件函数
     for f in os.listdir(absDir):
         absFile=os.path.join(absDir,f)
         if os.path.isdir(absFile):
@@ -62,9 +70,9 @@ def GoZip(absDir,zipFile):
             relFile=absFile[len(os.getcwd())+1:]
             zipFile.write(relFile)
     return
-#用于打包课件
 
-def submit(ac):
+def submit(ac, zName):
+    #课件下载部分
     dirf = dirf = str(os.path.dirname(os.path.realpath(sys.argv[0])))
     try:
         shutil.rmtree(dirf + "\\Courseware\\")
@@ -100,43 +108,76 @@ def submit(ac):
             continue
         cnt+=1
     print("======[ FINNISH ]======")
-    print('[MSG] 完成下载，正在尝试打包课件...')
+    print('[MSG] Download Process Finished，Trying To Package The Courseware...')
     dirf = str(os.path.dirname(os.path.realpath(sys.argv[0])))
     print("[DEBUG] AppDir: " + dirf + "\\")
     print("[DEBUG] CoursewareDir: " + dirf + "\\Courseware\\")
-    os.system("cd " + dirf + "\\Courseware\\ && " + sys.argv[0] + " -p " + dirf)
-
-try:
-    if sys.argv[1] == "-p":
-        print("======[ PACKING ]======")
-        zipFilePath = os.path.join(sys.argv[2], "Courseware.enbx")
-        zipFile = zipfile.ZipFile(zipFilePath, "w", zipfile.ZIP_DEFLATED)
-        absDir = os.path.join(sys.argv[2], "Courseware")
-        GoZip(absDir, zipFile)
-        print("[MSG] DONE!")
-        sys.exit(0)
-    elif sys.argv[1] == "-d":
-        print("Downloading...")
-        submit(sye.argv[2])
-    elif sys.argv[1] == "-h":
-        print("-d [AccessCode]           <Start Download>")
-        print("-h                        <Print Help MSG>")
-        print("-p [path]                 <Start Packing>")
     
-except Exception as re:
-    #print(re)
+    print("======[ PACKING ]======")
+    os.system("cd " + dirf + "\\Courseware\\ && " + sys.argv[0] + " -p " + dirf + " " + DelEvalString(zName) + ".enbx")
+    #调用自己，打包课件
+    
+    print("======[ DELATING ]======")
+    os.system(sys.argv[0] + " -del")
+    #调用自己，删除临时的下载文件
+
+def main():
+    #主程序
+    print("Welcome Using Lizhi Courseware Tool (Lite)")
+    print("输入courseUid来获取教室课件资源，你可以在教室的链接中找到它（如\".../room?courseUid=[这里就是courseUid]&appCode...\"）")
+    cUid = input("[INPUT] courseUid: ")
     print("")
-#这里是用于ZIP打包时获取后缀信息
+    CList = getCoursewareList(cUid)
 
-print("Welcome Using Lizhi Courseware Tool (Lite)")
-print("输入courseUid来获取教室课件资源，你可以在教室的链接中找到它（如\".../room?courseUid=[这里就是courseUid]&appCode...\"）")
-cUid = input("[INPUT] courseUid: ")
-print("")
-CList = getCoursewareList(cUid)
+    if CList == {}:
+        print("[ERROR] Please Input The Right No.")
+        sys.exit(0)
+    else:
+        print("======[ PROCESSING ]======")
+        submit(str(CList["accessCode"]), str(CList["name"]))
 
-if CList == {}:
-    print("[ERROR] Please Input The Right No.")
-    sys.exit(0)
-else:
-    print("======[ PROCESSING ]======")
-    submit(str(CList["accessCode"]))
+def execData():
+    #这里是用于ZIP打包时获取后缀信息
+    try:
+        if sys.argv[1] == "-p":
+            #打包课件部分
+            zPath = sys.argv[2]
+            zName = DelEvalString(sys.argv[3])
+            
+            zipFilePath = os.path.join(zPath, zName)
+            zipFile = zipfile.ZipFile(zipFilePath, "w", zipfile.ZIP_DEFLATED)
+            absDir = os.path.join(zPath, "Courseware")
+            GoZip(absDir, zipFile)
+            print("[MSG] DONE!")
+            sys.exit(0)
+            
+        elif sys.argv[1] == "-d":
+            #下载部分（外部程序调用）
+            print("Downloading...")
+            submit(sye.argv[2], sye.argv[3])
+            
+        elif sys.argv[1] == "-del":
+            #删除用于下载的临时文件
+            dirf = dirf = str(os.path.dirname(os.path.realpath(sys.argv[0])))
+            try:
+                shutil.rmtree(dirf + "\\Courseware\\")
+                print("Done")
+            except:
+                print("Failed")
+            
+        elif sys.argv[1] == "-h":
+            print("-d [AccessCode] [SaveName]   <Start Download>")
+            print("-h                           <Print Help MSG>")
+            print("-p [path] [SaveName]         <Start Packing>")
+            print("-del                         <Del Temp Files >")
+        
+        return "ok"
+        
+    except Exception as re:
+        #print(re)
+        return ""
+
+if __name__ == '__main__':
+    a = execData()
+    if a == "":
+        main()
