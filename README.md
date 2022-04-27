@@ -13,12 +13,12 @@
 <img width="881" alt="步骤3" src="https://user-images.githubusercontent.com/79049368/164584235-69c660ac-6fad-44cd-85e7-fc6f9f5dfdc7.PNG">
 
 **4.打开程序所在目录（文件夹），并启动程序**  
-<img width="485" alt="步骤4" src="https://user-images.githubusercontent.com/79049368/164378133-b4eed9b3-0e3c-444e-845c-e7ae13d039c4.PNG">
+![步骤4](https://user-images.githubusercontent.com/79049368/165438884-ee3a4959-2961-4480-a480-611582525c25.png)
 
 **5.在弹出的黑框里的“Url: ”后面粘贴刚刚复制的链接（标题栏右键->编辑->粘贴），并按下Enter键（如图）**  
 ![步骤5](https://user-images.githubusercontent.com/79049368/165437929-1b36b1b0-8279-4681-864c-034743ffb0fd.png)
 
-**6.之后会提示在课件列表中做出选择，需要输入课件名称前的数字序号**  
+**6.之后会提示在课件列表中做出选择，选择想要下载的课件后输入所选择的课件名称前的数字序号**  
 
 **7.如果你完美地执行了以上所给的操作，那么就会出现以下界面。**  
 提示：程序会执行一段时间（执行时间按照课件大小而定），等到程序界面显示了“===[FINISH]===”后，就会开始打包课件为enbx格式  
