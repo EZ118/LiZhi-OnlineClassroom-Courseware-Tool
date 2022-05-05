@@ -128,13 +128,10 @@ def StartExecToPack():
     print("======[ PACKING ]======")
 
     try:
-        if DelEvalString(zName) == "":
-            zName = "Courseware"
+        os.system("cd " + dirf + "\\Courseware\\ && " + sys.argv[0] + " -p " + dirf + " " + zName + ".enbx")
     except:
-        zName = "Courseware"
+        os.system("cd " + dirf + "\\Courseware\\ && " + sys.argv[0] + " -p " + dirf + " Courseware.enbx")
     
-    os.system("cd " + dirf + "\\Courseware\\ && " + sys.argv[0] + " -p " + dirf + " " + DelEvalString(zName) + ".enbx")
-    #调用自己，打包课件
     showinfo('提示', '打包完成！')
 
     dirf = dirf = str(os.path.dirname(os.path.realpath(sys.argv[0])))
