@@ -5,11 +5,17 @@ import sys
 import zipfile
 import shutil
 
+token = "2fde42a649954faa802869e3c07a4563"
+#token表示用户识别字符串，如果使用时提示“auth fail”，请按照：
+#https://github.com/EZ118/LiZhi-OnlineClassroom-Courseware-Tool/blob/main/README.md
+#所示的“维护方法”，修复提示。
+#注：每个人的用户识别字符串不同，而且字符串会随着时间而变化，所以说目前是无法完全修复的!
+
 headers = {
     "Accept": "*/*",
     "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
-    "Cookie": "x-auth-token=7516bf29191348b683bb7c3b4c601c1a; x-auth-app=en-easilive; ",
+    "Cookie": "x-auth-token=" + token + "; x-auth-app=en-easilive; ",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64;` rv:47.0) Gecko/20100101 Firefox/47.0"
 }
 #请求时传输的Cookies、UA等待数据
@@ -114,7 +120,7 @@ def submit(ac, zName):
             FilePath = filelist["data"]["files"][cnt]["path"]
             print("[DOWNLOAD] FILE: " + filelist["data"]["files"][cnt]["name"])
             request_download(DownloadUrl, dirf + "\\Courseware\\" + FilePath)
-            print("[DONE] SIZE: " + str(filelist["data"]["files"][cnt]["size"]) + " byte")
+            print("[DONE] SIZE: " + str(filelist["data"]["files"][cnt]["size"]) + " bytes")
         except Exception as re:
             print(re)
             continue
