@@ -1,6 +1,7 @@
 # LiZhi-OnlineClassroom-Courseware-Tool  
 希沃立知课堂中教师课件自动获取工具，使用Python开发，包括自动下载课件、自动打包课件为enbx等  
 因为该程序在运行过程中需要反复调用自己，需要使用系统内置的命令（不同系统命令是不一样的），因此若大家想让这个程序运行在macOS、Linux、Android等，需要按照情况对程序做出相应的改动。而本作者只有Windows PC，没有运行macOS或Linux的电脑。  
+如果程序出现问题，请参照本文档的“维护方法”部分！   
 **来自编者：最基础的版本所需要的步骤十分复杂，学习成本高，不容易操作。而现在的最新版本**  
 
 ## 一、 通过该工具获取课程回放中的课件的方法  
@@ -27,3 +28,12 @@
 
 **8.课件下载完成后，就可以看见软件的目录下出现“课件名 + .enbx”（课件名是按照课件的名称而定的），这个文件就是可以用希沃白板直接打开的课件**  
 <img width="490" alt="步骤8" src="https://user-images.githubusercontent.com/79049368/164380886-99aa36d4-e4ea-4aac-b84c-772070ba45fa.PNG">
+
+
+##维护方法（出现错误提示框，显示“auth fail”的解决方法）   
+**首先，请按照以下图片所示的方式，找到官网中最新的x-auth-token**   
+![image](https://user-images.githubusercontent.com/79049368/169180912-a4596f5c-24c6-44e7-aa95-f0f99e27c498.png)   
+
+**接着修改源码中的token变量，将上一步所找到的x-auth-token覆盖原先的变量**   
+![image](https://user-images.githubusercontent.com/79049368/169181382-10f16e87-bfce-4bc1-80bc-7956924b2ea0.png)   
+
