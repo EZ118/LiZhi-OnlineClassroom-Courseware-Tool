@@ -8,7 +8,8 @@ import sys
 import zipfile
 import shutil
 
-token = "2fde42a649954faa802869e3c07a4563"
+with open('AuthToken.key',"r") as f:    #设置文件对象
+    token = f.read()
 #token表示用户识别字符串，如果使用时提示“auth fail”，请按照：
 #https://github.com/EZ118/LiZhi-OnlineClassroom-Courseware-Tool/blob/main/README.md
 #所示的“维护方法”，修复提示。
