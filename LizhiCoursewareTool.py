@@ -5,7 +5,13 @@ import sys
 import zipfile
 import shutil
 
-token = "2fde42a649954faa802869e3c07a4563"
+try:
+    with open('AuthToken.key',"r") as f:    #设置文件对象
+        token = f.read()
+except:
+    token = ""
+    print("[-] AuthToken.key Not Found!")
+
 #token表示用户识别字符串，如果使用时提示“auth fail”，请按照：
 #https://github.com/EZ118/LiZhi-OnlineClassroom-Courseware-Tool/blob/main/README.md
 #所示的“维护方法”，修复提示。
@@ -41,12 +47,12 @@ def getCoursewareList(cUid):
     if filelist["error_code"] != 0:
         #当返回的结果输出错误代码
         
-        print("[ERROR] " + filelist["message"])
+        print("[-] " + filelist["message"])
         return "error"
     else:
         #正确返回
         
-        print("[MSG] Choose A Courseware To Download")
+        print("[*] Choose A Courseware To Download")
         #提示选择返回的课件列表
         
         cnt = 0
@@ -55,7 +61,7 @@ def getCoursewareList(cUid):
             print("< " + str(cnt) + " > NAME: " + dl["name"])
         #输出得到的课件列表
         
-        IptNum = int(input("[INPUT] Input No.: ")) - 1
+        IptNum = int(input("Input No.> ")) - 1
         #输入想要的课件号
 
         if IptNum < 0 or IptNum >= cnt:
@@ -88,18 +94,18 @@ def submit(ac, zName):
     dirf = dirf = str(os.path.dirname(os.path.realpath(sys.argv[0])))
     try:
         shutil.rmtree(dirf + "\\Courseware\\")
-        print("[DELETE] Done!")
+        print("[+] DELETE Done!")
     except:
-        print("[DELETE] Failed!")
+        print("[-] DELETE Failed!")
     #删除之前的临时文件
     
     try:
         os.mkdir(dirf + "\\Courseware\\")
         os.makedirs(dirf + "\\Courseware\\Resources\\")
         os.makedirs(dirf + "\\Courseware\\Slides\\")
-        print("[MAKEDIR] Done!")
+        print("[+] MAKEDIR Done!")
     except:
-        print("[MAKEDIR] Failed!")
+        print("[-] MAKEDIR Failed!")
     #重新创建临时下载文件夹
     
     url = "https://easilive.seewo.com/enow/open/api/v1/courseware/2/detail?shareLinkUid=&accessCode=" + ac + "&cid=&turnMp4=true&expireSeconds=10800&w=1280&h=612&turnWebp=false"
@@ -108,7 +114,7 @@ def submit(ac, zName):
     #从接口获取信息
     
     if filelist["error_code"] != 0:
-        print("[ERROR] " + filelist["message"])
+        print("[-] " + filelist["message"])
         return
     #确保返回的状态正常
     
@@ -118,19 +124,19 @@ def submit(ac, zName):
         try:
             DownloadUrl = filelist["data"]["files"][cnt]["url"]
             FilePath = filelist["data"]["files"][cnt]["path"]
-            print("[DOWNLOAD] FILE: " + filelist["data"]["files"][cnt]["name"])
+            print("[*] DOWNLOAD FILE: " + filelist["data"]["files"][cnt]["name"])
             request_download(DownloadUrl, dirf + "\\Courseware\\" + FilePath)
-            print("[DONE] SIZE: " + str(filelist["data"]["files"][cnt]["size"]) + " bytes")
+            print("[+] PATH: " + filelist["data"]["files"][cnt]["path"] + "")
         except Exception as re:
-            print(re)
+            print("[-] " + re)
             continue
         cnt+=1
     print("======[ FINNISH ]======")
     
-    print('[MSG] Download Process Finished，Trying To Package The Courseware...')    
+    print('[*] Download Process Finished，Trying To Package The Courseware...')    
     dirf = str(os.path.dirname(os.path.realpath(sys.argv[0])))
-    print("[DEBUG] AppDir: " + dirf + "\\")
-    print("[DEBUG] CoursewareDir: " + dirf + "\\Courseware\\")
+    print("[*] AppDir: " + dirf + "\\")
+    print("[*] CoursewareDir: " + dirf + "\\Courseware\\")
     #获取程序所在的根目录
     
     print("======[ PACKING ]======")
@@ -144,9 +150,14 @@ def submit(ac, zName):
 def main():
     #主程序
 
-    print("Welcome Using Lizhi Courseware Tool (Lite)")
+    print('''
+     ___        _ _     _    _ _____    _ 
+    | _ \___ _ | (_)___| |  (_)_  / |_ (_)
+    |  _/ _ \ || | / -_) |__| |/ /| ' \| |
+    |_| \___/\__/|_\___|____|_/___|_||_|_|
+    ''')
     print("输入立知课堂浏览器版的直播教室链接（或couseUid）")
-    cUid = input("[INPUT] URL: ")
+    cUid = input("INPUT URL> ")
     #输出问候语并向用户询问课程链接
     
     print("")
@@ -154,12 +165,12 @@ def main():
     if "https://" in cUid:
         try:
             cUid = cUid.split("?")[1].split("&")[0].split("=")[1]
-            print("[DEBUG] Get Uid From Web Link,uid=" + cUid)
+            print("[*] Get Uid From Web Link,uid=" + cUid)
         except:
-            print("[ERROR] Failed to Get Uid From Web Link!")
+            print("[*] Failed to Get Uid From Web Link!")
             return
     else:
-        print("[DEBUG] Get Uid Directly")
+        print("[*] Get Uid Directly")
     #从URL中提取courseUid或直接获取courseUid
     
     CList = getCoursewareList(cUid)
@@ -167,7 +178,7 @@ def main():
     
     if CList == {}:
         #当函数的返回值表示为空数组
-        print("[ERROR] Please Input The Right No.")
+        print("[-] Please Input The Right No.")
         return
     else:
         print("======[ PROCESSING ]======")
@@ -186,22 +197,23 @@ def execData():
             zipFile = zipfile.ZipFile(zipFilePath, "w", zipfile.ZIP_DEFLATED)
             absDir = os.path.join(zPath, "Courseware")
             GoZip(absDir, zipFile)
-            print("[MSG] DONE!")
+            print("[+] Packing Done!")
             sys.exit(0)
             
         elif sys.argv[1] == "-d":
             #下载部分（外部程序调用）
-            print("Downloading...")
-            submit(sye.argv[2], sye.argv[3])
+            print("[*] Downloading...")
+            submit(sys.argv[2], DelEvalString(sys.argv[3]))
+            sys.exit(0)
             
         elif sys.argv[1] == "-del":
             #删除下载后保留的临时文件
             dirf = dirf = str(os.path.dirname(os.path.realpath(sys.argv[0])))
             try:
                 shutil.rmtree(dirf + "\\Courseware\\")
-                print("Done")
+                print("[+] Done")
             except:
-                print("Failed")
+                print("[-] Failed")
             
         elif sys.argv[1] == "-h":
             #命令行帮助
