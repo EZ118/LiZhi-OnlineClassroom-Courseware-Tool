@@ -5,6 +5,9 @@ import pyperclip
 from tkinter import *
 from tkinter.messagebox import *
 
+import webbrowser
+
+
 with open('AuthToken.key',"r") as f:    #设置文件对象
     token = f.read()
 #token表示用户识别字符串，如果使用时提示“auth fail”，请按照：
@@ -59,27 +62,29 @@ def OK1():
     pyperclip.copy(filelist["data"]["content"][IptNum]["uid"])
 
 def OK2():
-    IptNum = int(clist.curselection()[0])
-    pyperclip.copy(filelist["data"]["content"][IptNum]["name"])
+    IptNum = int(clist.curselection()[0])    
+    pyperclip.copy("https://easilive.seewo.com/preview/replay?courseId=" + filelist["data"]["content"][IptNum]["uid"] + "&origin=course")
 
 def OK3():
     IptNum = int(clist.curselection()[0])
-    pyperclip.copy("https://easilive.seewo.com/preview/replay?courseId=" + filelist["data"]["content"][IptNum]["uid"] + "&origin=course")
+    webbrowser.open("https://easilive.seewo.com/preview/replay?courseId=" + filelist["data"]["content"][IptNum]["uid"] + "&origin=course")
 
 def Main():
     global win, text_entry, clist
     win = Tk()
     win.title('Get Course List')
-    win.geometry('314x350+150+150')
+    win.geometry('314x350+30+70')
+    win.resizable(width=False,height=False)	
+    win.attributes ("-topmost",1)
 
-    ButtonGo = Button(win, text='I want My CourseList Now!', font=('黑体', 11), command = getCoursewareList).place(y=15, x=15, width=286, height=28)
+    ButtonGo = Button(win, text='I Want My CourseList Now!', font=('黑体', 11), relief=RIDGE, command = getCoursewareList).place(y=15, x=15, width=286, height=28)
 
     clist = Listbox(win, font=('黑体', 11))
     clist.place(y=57, x=15, width=286, height=241)
 
-    ButtonCid = Button(win, text='COPY UID', font=('黑体', 11), command = OK1).place(y=310, x=15, width=69.3, height=28)
-    ButtonAc = Button(win, text='COPY NAME', font=('黑体', 11), command = OK2).place(y=310, x=98.3, width=69.3, height=28)
-    ButtonUrl = Button(win, text='COPY URL', font=('黑体', 11), command = OK3).place(y=310, x=181.6, width=69.3, height=28)
+    ButtonCid = Button(win, text='COPY UID', font=('黑体', 11), command = OK1, relief=GROOVE).place(y=310, x=15, width=84.6, height=28)
+    ButtonAc = Button(win, text='COPY URL', font=('黑体', 11), command = OK2, relief=GROOVE).place(y=310, x=114.6, width=84.6, height=28)
+    ButtonUrl = Button(win, text='OPEN IT', font=('黑体', 11), command = OK3, relief=GROOVE).place(y=310, x=214.2, width=84.6, height=28)
 
     win.mainloop()
 
