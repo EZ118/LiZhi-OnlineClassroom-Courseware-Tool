@@ -34,6 +34,7 @@
 **首先，请按照以下图片所示的方式，找到官网中最新的x-auth-token**   
 ![image](https://user-images.githubusercontent.com/79049368/169180912-a4596f5c-24c6-44e7-aa95-f0f99e27c498.png)   
 
-**接着修改源码中的token变量，将上一步所找到的x-auth-token覆盖原先的变量**   
-![image](https://user-images.githubusercontent.com/79049368/169181382-10f16e87-bfce-4bc1-80bc-7956924b2ea0.png)   
-
+**接着修改AuthToken.key中的token变量，将上一步所找到的x-auth-token覆盖原先的变量**   
+![image](https://user-images.githubusercontent.com/79049368/189658251-062e344e-5fbd-4781-8c4e-0035698bf6fa.png)
+   
+**保存文件后，重新打开软件即可**
