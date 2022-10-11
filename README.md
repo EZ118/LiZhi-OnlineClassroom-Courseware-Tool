@@ -30,7 +30,7 @@
 <img width="490" alt="步骤8" src="https://user-images.githubusercontent.com/79049368/164380886-99aa36d4-e4ea-4aac-b84c-772070ba45fa.PNG">
 
 
-##维护方法（出现错误提示框，显示“auth fail”的解决方法）   
+## 维护方法（出现错误提示框，显示“auth fail”的解决方法）   
 **首先，请按照以下图片所示的方式，找到官网中最新的x-auth-token**   
 ![image](https://user-images.githubusercontent.com/79049368/169180912-a4596f5c-24c6-44e7-aa95-f0f99e27c498.png)   
 
