@@ -5,7 +5,7 @@
    
 **来自编者：使用前务必参照该文档“配置用户登录凭证”，用户登录凭证请务必配置正确，否则无法使用。**   
    
-## 一、 通过该工具获取课程回放中的课件的方法   
+## 获取的课件的方法   
 **1.打开立知课堂官网**   
 <img width="960" alt="步骤1" src="https://user-images.githubusercontent.com/79049368/164376453-89c8591d-0809-4662-af44-d2401bcb70b7.PNG">   
    
@@ -39,3 +39,9 @@
 ![image](https://user-images.githubusercontent.com/79049368/189658251-062e344e-5fbd-4781-8c4e-0035698bf6fa.png)
    
 **保存文件后，重新打开软件即可**
+
+
+## 相关API参数解释
+UID = courseId: 课程ID，回放课程ID和直播课程ID相同   
+accessCode: 课件访问码，可以通过相关API获取每一节课的课件列表，课件列表中包含课件的访问码，该访问码用于获取课件   
+coursewareId: 课件ID，通过相关API获取课件列表，课件列表中包含课件的ID，该ID用于获取课件略缩图和课件信息
